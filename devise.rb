@@ -67,7 +67,7 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 # Layout
 ########################################
 run 'rm app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.slim', <<-TEXT
+file 'app/views/layouts/application.slim', <<-SLIM
 doctype html
 html
   head
@@ -77,18 +77,20 @@ html
     title TODO
     = csrf_meta_tags
     = action_cable_meta_tag
-    = stylesheet_link_tag 'application', media: 'all'
-    /! Uncomment if you import CSS in app/javascript/packs/application.js
-  body
+    = csp_meta_tag
+
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    /= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    / Uncomment to import CSS in app/javascript/packs/application.js
+
     = render 'shared/navbar'
     = render 'shared/flashes'
     = yield
     = javascript_include_tag 'application'
-    = javascript_pack_tag 'application'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+SLIM
 
-TEXT
-
-file 'app/views/shared/_flashes.slim', <<-TEXT
+file 'app/views/shared/_flashes.slim', <<-SLIM
 - if notice
   .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert" 
     = notice
@@ -99,8 +101,7 @@ file 'app/views/shared/_flashes.slim', <<-TEXT
     = alert
     button.close aria-label="Close" data-dismiss="alert" type="button" 
       span aria-hidden="true"  ×
-
-TEXT
+SLIM
 
 run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
 run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
