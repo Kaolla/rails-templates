@@ -5,22 +5,19 @@ run 'pgrep spring | xargs kill -9'
 run 'rm Gemfile'
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
 ruby '#{RUBY_VERSION}'
 
-#{"gem 'bootsnap', require: false" if Rails.version >= "5.2"}
-gem 'devise'
-gem 'jbuilder', '~> 2.0'
-gem 'pg', '~> 0.21'
-gem 'puma'
 gem 'rails', '#{Rails.version}'
-gem 'redis'
+gem 'pg', '>= 0.18', '< 2.0'
+gem 'puma', '~> 3.11'
+gem 'sass-rails', '~> 5'
+gem 'webpacker', '~> 4.0'
+gem 'turbolinks', '~> 5'
+gem 'jbuilder', '~> 2.7'
 
-gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 5.6.1'
-gem 'sassc-rails'
-gem 'simple_form'
-gem 'uglifier'
-gem 'webpacker'
+#{"gem 'bootsnap', '>= 1.4.2', require: false" if Rails.version >= "5.2"}
 
 group :development do
   gem 'web-console', '>= 3.3.0'
@@ -32,8 +29,19 @@ group :development, :test do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'dotenv-rails'
 end
+
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# Custom adds
+gem 'redis'
+gem 'autoprefixer-rails'
+gem 'uglifier'
+gem 'sassc-rails'
+gem 'simple_form'
+gem 'font-awesome-sass', '~> 5.6.1'
+gem 'devise', '~> 4.7.0'
+gem 'slim'
 RUBY
 
 # Ruby version
@@ -53,12 +61,6 @@ run 'rm -rf vendor'
 run 'curl -L https://github.com/lewagon/stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
 
-run 'rm app/assets/javascripts/application.js'
-file 'app/assets/javascripts/application.js', <<-JS
-//= require rails-ujs
-//= require_tree .
-JS
-
 # Dev environment
 ########################################
 gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
@@ -66,45 +68,37 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 # Layout
 ########################################
 run 'rm app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.erb', <<-HTML
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO</title>
-    <%= csrf_meta_tags %>
-    <%= action_cable_meta_tag %>
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%#= stylesheet_pack_tag 'application', media: 'all' %> <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
-  </head>
-  <body>
-    <%= render 'shared/navbar' %>
-    <%= render 'shared/flashes' %>
-    <%= yield %>
-    <%= javascript_include_tag 'application' %>
-    <%= javascript_pack_tag 'application' %>
-  </body>
-</html>
+file 'app/views/layouts/application.slim', <<-HTML
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    meta charset="UTF-8" /
+    meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" /
+    title TODO
+    = csrf_meta_tags
+    = action_cable_meta_tag
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+  body
+    = render 'shared/navbar'
+    = render 'shared/flashes'
+    = yield
+    = javascript_include_tag 'application'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 HTML
 
-file 'app/views/shared/_flashes.html.erb', <<-HTML
-<% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-    <%= notice %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-<% end %>
-<% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    <%= alert %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-<% end %>
+file 'app/views/shared/_flashes.slim', <<-HTML
+- if notice
+  .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert" 
+    = notice
+    button.close aria-label="Close" data-dismiss="alert" type="button" 
+      span aria-hidden="true"  ×
+- if alert
+  .alert.alert-warning.alert-dismissible.fade.show.m-1 role="alert" 
+    = alert
+    button.close aria-label="Close" data-dismiss="alert" type="button" 
+      span aria-hidden="true"  ×
 HTML
 
 run 'curl -L https://github.com/lewagon/awesome-navbars/raw/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
@@ -113,7 +107,7 @@ run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/lo
 # README
 ########################################
 markdown_file_content = <<-MARKDOWN
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Rails app generated with custom template, created by Romain Manguin.
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 
@@ -142,27 +136,6 @@ after_bundle do
   # Routes
   ########################################
   route "root to: 'pages#home'"
-
-  # Git ignore
-  ########################################
-  run 'rm .gitignore'
-  file '.gitignore', <<-TXT
-.bundle
-log/*.log
-tmp/**/*
-tmp/*
-!log/.keep
-!tmp/.keep
-*.swp
-.DS_Store
-public/assets
-public/packs
-public/packs-test
-node_modules
-yarn-error.log
-.byebug_history
-.env*
-TXT
 
   # Devise install + user
   ########################################
@@ -203,19 +176,26 @@ RUBY
 
   # Webpacker / Yarn
   ########################################
+  run 'mkdir app/javascript/packs/src'
+  run 'touch app/javascript/packs/src/application.scss'
+  file 'app/javascript/packs/src/application.scss', <<-TXT
+    @import '~bootstrap/scss/bootstrap';
+  TXT
   run 'rm app/javascript/packs/application.js'
+
   run 'yarn add popper.js jquery bootstrap'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
+import "./src/application.scss";
 JS
 
   inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
 <<-JS
-const webpack = require('webpack')
+const { environment } = require('@rails/webpacker')
 
+const webpack = require('webpack')
 // Preventing Babel from transpiling NodeModules packages
 environment.loaders.delete('nodeModules');
-
 // Bootstrap 4 has a dependency over jQuery & Popper.js:
 environment.plugins.prepend('Provide',
   new webpack.ProvidePlugin({
@@ -228,10 +208,6 @@ environment.plugins.prepend('Provide',
 JS
   end
 
-  # Dotenv
-  ########################################
-  run 'touch .env'
-
   # Rubocop
   ########################################
   run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
@@ -240,5 +216,5 @@ JS
   ########################################
   git :init
   git add: '.'
-  git commit: "-m 'Initial commit with devise template from https://github.com/lewagon/rails-templates'"
+  git commit: "-m 'Initial commit with custom devise template'"
 end
