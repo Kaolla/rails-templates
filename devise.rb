@@ -67,45 +67,39 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 # Layout
 ########################################
 run 'rm app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.html.erb', <<-HTML
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TODO</title>
-    <%= csrf_meta_tags %>
-    <%= action_cable_meta_tag %>
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%#= stylesheet_pack_tag 'application', media: 'all' %> <!-- Uncomment if you import CSS in app/javascript/packs/application.js -->
-  </head>
-  <body>
-    <%= render 'shared/navbar' %>
-    <%= render 'shared/flashes' %>
-    <%= yield %>
-    <%= javascript_include_tag 'application' %>
-    <%= javascript_pack_tag 'application' %>
-  </body>
-</html>
+file 'app/views/layouts/application.slim', <<-HTML
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    meta charset="UTF-8" /
+    meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" /
+    title TODO
+    = csrf_meta_tags
+    = action_cable_meta_tag
+    = stylesheet_link_tag 'application', media: 'all'
+    /! Uncomment if you import CSS in app/javascript/packs/application.js
+  body
+    = render 'shared/navbar'
+    = render 'shared/flashes'
+    = yield
+    = javascript_include_tag 'application'
+    = javascript_pack_tag 'application'
+
 HTML
 
-file 'app/views/shared/_flashes.html.erb', <<-HTML
-<% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-    <%= notice %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-<% end %>
-<% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    <%= alert %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-<% end %>
+file 'app/views/shared/_flashes.slim', <<-HTML
+- if notice
+  .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert" 
+    = notice
+    button.close aria-label="Close" data-dismiss="alert" type="button" 
+      span aria-hidden="true"  ×
+- if alert
+  .alert.alert-warning.alert-dismissible.fade.show.m-1 role="alert" 
+    = alert
+    button.close aria-label="Close" data-dismiss="alert" type="button" 
+      span aria-hidden="true"  ×
+
 HTML
 
 run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
