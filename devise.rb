@@ -68,7 +68,7 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 # Layout
 ########################################
 run 'rm app/views/layouts/application.html.erb'
-file 'app/views/layouts/application.slim', <<-HTML
+file 'app/views/layouts/application.slim', <<-TEXT
 doctype html
 html
   head
@@ -86,9 +86,9 @@ html
     = yield
     = javascript_include_tag 'application'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
-HTML
+TEXT
 
-file 'app/views/shared/_flashes.slim', <<-HTML
+file 'app/views/shared/_flashes.slim', <<-TEXT
 - if notice
   .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert" 
     = notice
@@ -99,7 +99,7 @@ file 'app/views/shared/_flashes.slim', <<-HTML
     = alert
     button.close aria-label="Close" data-dismiss="alert" type="button" 
       span aria-hidden="true"  ×
-HTML
+TEXT
 
 # run 'curl -L https://github.com/lewagon/awesome-navbars/raw/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
 # run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
