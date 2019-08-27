@@ -5,7 +5,6 @@ run 'pgrep spring | xargs kill -9'
 run 'rm Gemfile'
 file 'Gemfile', <<-RUBY
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '#{RUBY_VERSION}'
 
