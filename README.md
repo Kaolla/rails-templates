@@ -11,7 +11,7 @@ Get a minimal rails 6.0 app ready to be deployed on Heroku with Bootstrap, Simpl
 ```bash
 rails new \
   --database=postgresql \
-  -m https://github.com/Kaolla/rails-templates/master/minimal.rb \
+  -m https://github.com/Kaolla/rails-templates/blob/master/minimal.rb \
   CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
 
@@ -22,6 +22,6 @@ Same as minimal **plus** a Devise install with a generated `User` model.
 ```bash
 rails new \
   --database=postgresql \
-  -m https://github.com/Kaolla/rails-templates/master/devise.rb \
+  -m https://github.com/Kaolla/rails-templates/blob/master/devise.rb \
   CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
