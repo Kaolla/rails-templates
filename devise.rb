@@ -86,7 +86,7 @@ html
     = render 'shared/navbar'
     = render 'shared/flashes'
     = yield
-    / = javascript_include_tag 'application'
+    = javascript_include_tag 'application'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 SLIM
 
@@ -124,56 +124,6 @@ config.generators do |generate|
 RUBY
 
 environment generators
-
-  # Environments
-  ########################################
-  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
-
-  # Webpacker / Yarn
-  ########################################
-  run 'mkdir app/javascript/packs/src'
-  file 'app/javascript/packs/src/application.scss', <<-TXT
-    @import '~bootstrap/scss/bootstrap';
-  TXT
-  run 'rm app/javascript/packs/application.js'
-
-  run 'yarn add popper.js jquery bootstrap'
-  file 'app/javascript/packs/application.js', <<-JS
-import "bootstrap";
-import "./src/application.scss";
-JS
-
-  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-<<-JS
-//const { environment } = require('@rails/webpacker')
-//
-//const webpack = require('webpack')
-//// Preventing Babel from transpiling NodeModules packages
-//environment.loaders.delete('nodeModules');
-//// Bootstrap 4 has a dependency over jQuery & Popper.js:
-//environment.plugins.prepend('Provide',
-//  new webpack.ProvidePlugin({
-//    $: 'jquery',
-//    jQuery: 'jquery',
-//    Popper: ['popper.js', 'default']
-//  })
-//)
-const { environment } = require('@rails/webpacker')
-
-const webpack = require('webpack')
-environment.plugins.append('Provide', 
-  new webpack.ProvidePlugin({
-    $: 'jquery/src/jquery',
-    jQuery: 'jquery/src/jquery',
-    Popper: ['popper.js', 'default'],
-  })
-)
-
-module.exports = environment
-
-JS
-  end
 
 ########################################
 # AFTER BUNDLE
@@ -221,7 +171,42 @@ class PagesController < ApplicationController
 end
 RUBY
 
-  
+  # Environments
+  ########################################
+  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+
+  # Webpacker / Yarn
+  ########################################
+  run 'mkdir app/javascript/packs/src'
+  file 'app/javascript/packs/src/application.scss', <<-TXT
+    @import '~bootstrap/scss/bootstrap';
+  TXT
+  run 'rm app/javascript/packs/application.js'
+
+  run 'yarn add popper.js jquery bootstrap'
+  file 'app/javascript/packs/application.js', <<-JS
+import "bootstrap";
+import "./src/application.scss";
+JS
+
+  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
+<<-JS
+const { environment } = require('@rails/webpacker')
+
+const webpack = require('webpack')
+// Preventing Babel from transpiling NodeModules packages
+environment.loaders.delete('nodeModules');
+// Bootstrap 4 has a dependency over jQuery & Popper.js:
+environment.plugins.prepend('Provide',
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    Popper: ['popper.js', 'default']
+  })
+)
+JS
+  end
 
   # Rubocop
   ########################################
