@@ -62,7 +62,7 @@ run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/
 
 # Dev environment
 ########################################
-gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
+# gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
 
 # Layout
 ########################################
