@@ -103,7 +103,7 @@ file 'app/views/shared/_flashes.slim', <<-SLIM
       span aria-hidden="true"  ×
 SLIM
 
-run 'curl -L https://raw.githubusercontent.com/Kaolla/awesome-navbars/master/templates/_navbar_wagon.slim?token=ADU7E2SLFSLXIYA4KCEOJ5S5MYTA6 > app/views/shared/_navbar.slim'
+run 'curl -L https://raw.githubusercontent.com/Kaolla/awesome-navbars/master/templates/_navbar_wagon.slim > app/views/shared/_navbar.slim'
 run 'curl -L https://raw.githubusercontent.com/Kaolla/rails-templates/master/logo.png > app/assets/images/logo.png'
 
 # README
