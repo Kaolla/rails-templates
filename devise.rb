@@ -57,7 +57,7 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/Kaolla/rails-stylesheets-master/archive/master.zip > stylesheets.zip'
+run 'curl -L https://github.com/Kaolla/rails-stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
 
 # Dev environment
@@ -86,7 +86,7 @@ html
     = render 'shared/navbar'
     = render 'shared/flashes'
     = yield
-    = javascript_include_tag 'application'
+    / = javascript_include_tag 'application'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 SLIM
 
