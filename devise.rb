@@ -124,7 +124,24 @@ config.generators do |generate|
 RUBY
 
 environment generators
+  # Environments
+  ########################################
+  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
+  # Webpacker / Yarn
+  ########################################
+  run 'mkdir app/javascript/packs/src'
+  file 'app/javascript/packs/src/application.scss', <<-TXT
+    @import '~bootstrap/scss/bootstrap';
+  TXT
+  run 'rm app/javascript/packs/application.js'
+
+  run 'yarn add popper.js jquery bootstrap'
+  file 'app/javascript/packs/application.js', <<-JS
+import "bootstrap";
+import "./src/application.scss";
+JS
 ########################################
 # AFTER BUNDLE
 ########################################
@@ -171,24 +188,7 @@ class PagesController < ApplicationController
 end
 RUBY
 
-  # Environments
-  ########################################
-  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
-  # Webpacker / Yarn
-  ########################################
-  run 'mkdir app/javascript/packs/src'
-  file 'app/javascript/packs/src/application.scss', <<-TXT
-    @import '~bootstrap/scss/bootstrap';
-  TXT
-  run 'rm app/javascript/packs/application.js'
-
-  run 'yarn add popper.js jquery bootstrap'
-  file 'app/javascript/packs/application.js', <<-JS
-import "bootstrap";
-import "./src/application.scss";
-JS
 
   inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
 <<-JS
