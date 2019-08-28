@@ -62,7 +62,7 @@ run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/
 
 # Dev environment
 ########################################
-# gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
+gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
 
 # Layout
 ########################################
@@ -115,33 +115,16 @@ file 'README.md', markdown_file_content, force: true
 
 # Generators
 ########################################
-# generators = <<-RUBY
-# config.generators do |generate|
-#       generate.assets false
-#       generate.helper false
-#       generate.test_framework  :test_unit, fixture: false
-#     end
-# RUBY
+generators = <<-RUBY
+config.generators do |generate|
+      generate.assets false
+      generate.helper false
+      generate.test_framework  :test_unit, fixture: false
+    end
+RUBY
 
 environment generators
-  # Environments
-  ########################################
-  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
-  # Webpacker / Yarn
-  ########################################
-  run 'mkdir app/javascript/packs/src'
-  file 'app/javascript/packs/src/application.scss', <<-TXT
-    @import '~bootstrap/scss/bootstrap';
-  TXT
-  run 'yarn add popper.js jquery bootstrap'
-  run 'rm app/javascript/packs/application.js'
-
-  file 'app/javascript/packs/application.js', <<-JS
-import "bootstrap";
-import "./src/application.scss";
-JS
 ########################################
 # AFTER BUNDLE
 ########################################
@@ -188,7 +171,24 @@ class PagesController < ApplicationController
 end
 RUBY
 
+  # Environments
+  ########################################
+  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
+  # Webpacker / Yarn
+  ########################################
+  run 'mkdir app/javascript/packs/src'
+  file 'app/javascript/packs/src/application.scss', <<-TXT
+    @import '~bootstrap/scss/bootstrap';
+  TXT
+  run 'yarn add popper.js jquery bootstrap'
+  run 'rm app/javascript/packs/application.js'
+
+  file 'app/javascript/packs/application.js', <<-JS
+import "bootstrap";
+import "./src/application.scss";
+JS
 
   inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
 <<-JS
