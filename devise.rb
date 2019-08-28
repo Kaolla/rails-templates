@@ -115,13 +115,13 @@ file 'README.md', markdown_file_content, force: true
 
 # Generators
 ########################################
-generators = <<-RUBY
-config.generators do |generate|
-      generate.assets false
-      generate.helper false
-      generate.test_framework  :test_unit, fixture: false
-    end
-RUBY
+# generators = <<-RUBY
+# config.generators do |generate|
+#       generate.assets false
+#       generate.helper false
+#       generate.test_framework  :test_unit, fixture: false
+#     end
+# RUBY
 
 environment generators
   # Environments
@@ -135,9 +135,9 @@ environment generators
   file 'app/javascript/packs/src/application.scss', <<-TXT
     @import '~bootstrap/scss/bootstrap';
   TXT
+  run 'yarn add popper.js jquery bootstrap'
   run 'rm app/javascript/packs/application.js'
 
-  run 'yarn add popper.js jquery bootstrap'
   file 'app/javascript/packs/application.js', <<-JS
 import "bootstrap";
 import "./src/application.scss";
@@ -210,7 +210,7 @@ JS
 
   # Rubocop
   ########################################
-  run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
+  # run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
 
   # Git
   ########################################
