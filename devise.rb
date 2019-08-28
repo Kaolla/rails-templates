@@ -57,7 +57,7 @@ YAML
 ########################################
 run 'rm -rf app/assets/stylesheets'
 run 'rm -rf vendor'
-run 'curl -L https://github.com/lewagon/stylesheets/archive/master.zip > stylesheets.zip'
+run 'curl -L https://github.com/Kaolla/rails-stylesheets-master/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
 
 # Dev environment
@@ -80,7 +80,7 @@ html
     = csp_meta_tag
 
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    /= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     / Uncomment to import CSS in app/javascript/packs/application.js
 
     = render 'shared/navbar'
@@ -103,8 +103,8 @@ file 'app/views/shared/_flashes.slim', <<-SLIM
       span aria-hidden="true"  ×
 SLIM
 
-run 'curl -L https://raw.githubusercontent.com/lewagon/awesome-navbars/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
-run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/logo.png > app/assets/images/logo.png'
+run 'curl -L https://raw.githubusercontent.com/Kaolla/awesome-navbars/master/templates/_navbar_wagon.slim?token=ADU7E2SLFSLXIYA4KCEOJ5S5MYTA6 > app/views/shared/_navbar.slim'
+run 'curl -L https://raw.githubusercontent.com/Kaolla/rails-templates/master/logo.png > app/assets/images/logo.png'
 
 # README
 ########################################
