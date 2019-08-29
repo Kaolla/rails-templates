@@ -41,6 +41,7 @@ gem 'simple_form'
 gem 'font-awesome-sass', '~> 5.6.1'
 gem 'devise', '~> 4.7.0'
 gem 'slim'
+gem 'dotenv-rails', groups: [:development, :test]
 RUBY
 
 # Ruby version
@@ -81,13 +82,11 @@ html
 
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    / Uncomment to import CSS in app/javascript/packs/application.js
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 
     = render 'shared/navbar'
     = render 'shared/flashes'
     = yield
-    = javascript_include_tag 'application'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
 SLIM
 
 file 'app/views/shared/_flashes.slim', <<-SLIM
