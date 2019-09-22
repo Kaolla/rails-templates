@@ -170,38 +170,6 @@ def set_generators
   environment generators
 end
 
-
-add_gems
-add_configs 
-add_assets
-add_layout
-add_readme
-set_generators
-add_sidekiq
-add_announcements
-add_notifications
-add_whenever
-add_friendly_id
-add_user
-set_devise_secret
-add_js
-add_tailwind
-
-########################################
-# AFTER BUNDLE
-########################################
-after_bundle do
-  # Generators: db + simple form + pages controller
-  ########################################
-  rails_command 'db:drop db:create db:migrate'
-  generate(:controller, 'pages', 'home', 'terms', 'privacy', '--skip-routes', '--no-test-framework')
-
-  # Routes
-  ########################################
-  route "root to: 'pages#home'"
-  route "get '/terms', to: 'pages#terms'"
-  route "get '/privacy', to: 'pages#privacy'"
-
 def add_sidekiq
   environment "config.active_job.queue_adapter = :sidekiq"
 
@@ -265,44 +233,40 @@ def set_devise_secret
     "  config.secret_key = Rails.application.credentials.secret_key_base"
 end
 
-  # App controller
-  ########################################
-  run 'rm app/controllers/application_controller.rb'
-  file 'app/controllers/application_controller.rb', <<-RUBY
-class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
-  before_action :masquerade_user!
-  before_action :authenticate_user!
+def add_tailwind
+  run 'mkdir app/javascript/css'
+  run "yarn tailwind init app/javascript/stylesheets/tailwind.js"
+
+
+  run "touch app/javascript/stylesheets/application.scss"
+
+  file 'app/javascript/stylesheets/src/application.scss', <<-TXT
+  @import "tailwindcss/base";
+  @import "tailwindcss/components";
+
+  @import 'components/base';
+  @import 'components/announcements';
+  @import 'components/alert';
+  @import 'components/avatars';
+  @import 'components/typography';
+  @import 'components/buttons';
+  @import 'components/icons';
+  @import 'components/forms';
+  @import 'components/util';
+  @import 'components/nav';
+  @import 'components/code';
+  @import 'components/docs';
+  @import 'components/animation';
+  @import 'components/tabs';
+  @import 'components/pagination';
+  @import 'components/connected_accounts';
+  @import 'components/actiontext';
+  @import 'components/direct_uploads';
+  @import 'components/trix';
+
+  @import "tailwindcss/utilities";
+  TXT
 end
-RUBY
-
-  # migrate + devise views
-  ########################################
-  rails_command 'db:migrate'
-  generate('devise:views')
-
-  # Pages Controller
-  ########################################
-  run 'rm app/controllers/pages_controller.rb'
-  file 'app/controllers/pages_controller.rb', <<-RUBY
-class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:home]
-
-  def home
-  end
-
-  def terms
-  end
-
-  def privacy
-  end
-end
-RUBY
-
-  # Environments
-  ########################################
-  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
 def add_js
   run "yarn add jquery popper.js tailwindcss stimulus local-time"
@@ -350,40 +314,77 @@ JS
   end
 end
 
-def add_tailwind
-  run 'mkdir app/javascript/css'
-  run "yarn tailwind init app/javascript/stylesheets/tailwind.js"
+add_gems
+add_configs 
+add_assets
+add_layout
+add_readme
+set_generators
+add_sidekiq
+add_announcements
+add_notifications
+add_whenever
+add_friendly_id
+add_user
+set_devise_secret
+add_js
+add_tailwind
+
+########################################
+# AFTER BUNDLE
+########################################
+after_bundle do
+  # Generators: db + simple form + pages controller
+  ########################################
+  rails_command 'db:drop db:create db:migrate'
+  generate(:controller, 'pages', 'home', 'terms', 'privacy', '--skip-routes', '--no-test-framework')
+
+  # Routes
+  ########################################
+  route "root to: 'pages#home'"
+  route "get '/terms', to: 'pages#terms'"
+  route "get '/privacy', to: 'pages#privacy'"
 
 
-  run "touch app/javascript/stylesheets/application.scss"
 
-  file 'app/javascript/stylesheets/src/application.scss', <<-TXT
-  @import "tailwindcss/base";
-  @import "tailwindcss/components";
-
-  @import 'components/base';
-  @import 'components/announcements';
-  @import 'components/alert';
-  @import 'components/avatars';
-  @import 'components/typography';
-  @import 'components/buttons';
-  @import 'components/icons';
-  @import 'components/forms';
-  @import 'components/util';
-  @import 'components/nav';
-  @import 'components/code';
-  @import 'components/docs';
-  @import 'components/animation';
-  @import 'components/tabs';
-  @import 'components/pagination';
-  @import 'components/connected_accounts';
-  @import 'components/actiontext';
-  @import 'components/direct_uploads';
-  @import 'components/trix';
-
-  @import "tailwindcss/utilities";
-  TXT
+  # App controller
+  ########################################
+  run 'rm app/controllers/application_controller.rb'
+  file 'app/controllers/application_controller.rb', <<-RUBY
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+  before_action :masquerade_user!
+  before_action :authenticate_user!
 end
+RUBY
+
+  # migrate + devise views
+  ########################################
+  rails_command 'db:migrate'
+  generate('devise:views')
+
+  # Pages Controller
+  ########################################
+  run 'rm app/controllers/pages_controller.rb'
+  file 'app/controllers/pages_controller.rb', <<-RUBY
+class PagesController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:home]
+
+  def home
+  end
+
+  def terms
+  end
+
+  def privacy
+  end
+end
+RUBY
+
+  # Environments
+  ########################################
+  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
   # Rubocop
   ########################################
