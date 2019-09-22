@@ -29,7 +29,7 @@ def add_gems
   group :development, :test do
     gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
     gem 'pry-rails'
-    gem 'annotate'
+    gem 'annotate', '~> 2.7', '>= 2.7.1'
     gem 'brakeman'
     gem 'bundler-audit'
     gem 'letter_opener_web', '~> 1.3', '>= 1.3.4'
