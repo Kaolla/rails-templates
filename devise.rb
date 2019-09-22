@@ -322,12 +322,8 @@ add_layout
 add_readme
 set_generators
 add_sidekiq
-add_announcements
-add_notifications
 add_whenever
 add_friendly_id
-add_user
-set_devise_secret
 add_js
 add_tailwind
 
@@ -335,6 +331,11 @@ add_tailwind
 # AFTER BUNDLE
 ########################################
 after_bundle do
+  add_announcements
+  add_notifications
+
+  add_user
+  set_devise_secret
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
