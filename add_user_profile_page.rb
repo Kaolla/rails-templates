@@ -1,3 +1,5 @@
+# WIP
+
 run 'rails g migration AddExtraFieldsToUser phone_number:string description:text'
 run 'rails db:migrate'
 

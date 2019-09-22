@@ -11,7 +11,7 @@ do <<-TXT
   @import '~noty/lib/themes/sunset';
 TXT
 
-run 'app/views/shared/_flashes.slim'
+run 'rm app/views/shared/_flashes.slim'
 
 file 'app/views/shared/_flashes.slim', <<-SLIM
 - unless flash.empty?
