@@ -200,15 +200,15 @@ def add_whenever
   run "wheneverize ."
 end
 
-def add_friendly_id
-  generate "friendly_id"
+# def add_friendly_id
+#   generate "friendly_id"
 
-  insert_into_file(
-    Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
-    "[5.2]",
-    after: "ActiveRecord::Migration"
-  )
-end
+#   insert_into_file(
+#     Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
+#     "[5.2]",
+#     after: "ActiveRecord::Migration"
+#   )
+# end
 
 def add_user
   generate('devise:install')
@@ -334,7 +334,7 @@ after_bundle do
   add_notifications
   add_user
   set_devise_secret
-  add_friendly_id
+  # add_friendly_id
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
