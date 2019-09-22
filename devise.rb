@@ -323,18 +323,18 @@ add_readme
 set_generators
 add_sidekiq
 add_whenever
-add_js
-add_tailwind
 
 ########################################
 # AFTER BUNDLE
 ########################################
 after_bundle do
+  # add_friendly_id
   add_announcements
   add_notifications
   add_user
   set_devise_secret
-  # add_friendly_id
+  add_js
+  add_tailwind
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
