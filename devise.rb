@@ -268,6 +268,7 @@ def add_tailwind
   TXT
 
   # Set postcss.config.js
+  run 'rm postcss.config.js'
   file 'postcss.config.js', <<-JS
 let environment = {
   plugins: [
@@ -373,7 +374,7 @@ after_bundle do
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
-  generate simple_form:install
+  generate('simple_form:install')
   generate(:controller, 'pages', 'home', 'terms', 'privacy', '--skip-routes', '--no-test-framework')
 
   # Routes
