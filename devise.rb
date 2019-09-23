@@ -128,6 +128,7 @@ def add_layout
       = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
       = stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
       = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+      = script src="https://kit.fontawesome.com/a74ce6e41e.js" crossorigin="anonymous"
 
       = render 'shared/navbar'
       = render 'shared/flashes'
@@ -240,7 +241,7 @@ end
 def add_tailwind
   run 'mkdir app/javascript/css'
   run "./node_modules/.bin/tailwind init"
-  
+
   run "touch app/javascript/stylesheets/application.scss"
 
   file 'app/javascript/stylesheets/src/application.scss', <<-TXT
@@ -376,6 +377,7 @@ after_bundle do
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
+  generate simple_form:install
   generate(:controller, 'pages', 'home', 'terms', 'privacy', '--skip-routes', '--no-test-framework')
 
   # Routes
