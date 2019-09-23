@@ -240,7 +240,7 @@ end
 def add_tailwind
   run 'mkdir app/javascript/css'
   run "./node_modules/.bin/tailwind init"
-
+  
   run "touch app/javascript/stylesheets/application.scss"
 
   file 'app/javascript/stylesheets/src/application.scss', <<-TXT
