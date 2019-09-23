@@ -365,6 +365,8 @@ add_whenever
 # AFTER BUNDLE
 ########################################
 after_bundle do
+  generate('simple_form:install')
+  
   add_announcements
   add_notifications
   add_user
@@ -374,7 +376,6 @@ after_bundle do
   # Generators: db + simple form + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
-  generate('simple_form:install')
   generate(:controller, 'pages', 'home', 'terms', 'privacy', '--skip-routes', '--no-test-framework')
 
   # Routes
