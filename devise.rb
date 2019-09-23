@@ -76,10 +76,6 @@ def add_gems
   RUBY
 end
 
-# Ruby version
-########################################
-file '.ruby-version', RUBY_VERSION
-
 def add_configs 
     file 'Procfile', <<-YAML
   web: rails server
@@ -204,15 +200,15 @@ def add_whenever
   run "wheneverize ."
 end
 
-# def add_friendly_id
-#   generate "friendly_id"
+def add_friendly_id
+  generate "friendly_id"
 
-#   insert_into_file(
-#     Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
-#     "[5.2]",
-#     after: "ActiveRecord::Migration"
-#   )
-# end
+  insert_into_file(
+    Dir["db/migrate/**/*friendly_id_slugs.rb"].first,
+    "[5.2]",
+    after: "ActiveRecord::Migration"
+  )
+end
 
 def add_user
   generate('devise:install')
@@ -361,13 +357,13 @@ add_layout
 add_readme
 set_generators
 add_sidekiq
+add_friendly_id
 add_whenever
 
 ########################################
 # AFTER BUNDLE
 ########################################
 after_bundle do
-  # add_friendly_id
   add_announcements
   add_notifications
   add_user
