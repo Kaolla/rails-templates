@@ -71,7 +71,6 @@ def add_gems
   gem 'autoprefixer-rails'
   gem 'uglifier'
   gem 'simple_form'
-  gem 'font-awesome-sass', '~> 5.6.1'
   gem 'slim'
   RUBY
 end
@@ -98,7 +97,7 @@ def add_assets
   run 'rm -rf vendor'
   # run 'curl -L https://github.com/Kaolla/rails-stylesheets/archive/master.zip > stylesheets.zip'
   run 'curl -L https://github.com/Kaolla/rails-tailwind-components/archive/master.zip > components.zip'
-  run 'unzip components.zip -d app/assets && rm components.zip && mv app/assets/rails-tailwind-components-master app/assets/components'
+  run 'unzip components.zip -d app/javascript/css && rm components.zip && mv app/javascript/css/rails-tailwind-components-master app/javascript/css/components'
 end
 
 
@@ -366,7 +365,7 @@ add_whenever
 ########################################
 after_bundle do
   generate('simple_form:install')
-  
+
   add_announcements
   add_notifications
   add_user
