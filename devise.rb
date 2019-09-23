@@ -131,7 +131,10 @@ def add_layout
 
       = render 'shared/navbar'
       = render 'shared/flashes'
-      = yield
+
+      body.min-h-screen.bg-gray-100
+        .container.mx-auto
+          = yield
   SLIM
 
   file 'app/views/shared/_flashes.slim', <<-SLIM
@@ -236,7 +239,10 @@ end
 
 def add_tailwind
   run 'mkdir app/javascript/css'
-  run "yarn tailwind init app/javascript/stylesheets/tailwind.js"
+  run "./node_modules/.bin/tailwind init"
+
+require('tailwindcss'),
+require('autoprefixer'),
 
 
   run "touch app/javascript/stylesheets/application.scss"
@@ -267,10 +273,46 @@ def add_tailwind
 
   @import "tailwindcss/utilities";
   TXT
+
+  # Set postcss.config.js
+  file 'postcss.config.js', <<-JS
+let environment = {
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+    require('postcss-import'),
+    require('postcss-flexbugs-fixes'),
+    require('postcss-preset-env')({
+      autoprefixer: {
+        flexbox: 'no-2009'
+      },
+      stage: 3
+    }),
+  ]
+}
+
+// Only run PurgeCSS in production (you can also add staging here)
+if (process.env.RAILS_ENV === "production") {
+  environment.plugins.push(
+    require('@fullhuman/postcss-purgecss')({
+      content: [
+        './app/**/*.html.erb',
+        './app/helpers/**/*.rb',
+        './app/javascript/**/*.js',
+        './app/javascript/**/*.vue',
+        './app/javascript/**/*.jsx',
+      ],
+      defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+    })
+  )
+}
+
+module.exports = environment
+JS
 end
 
 def add_js
-  run "yarn add jquery popper.js tailwindcss stimulus local-time"
+  run "yarn add jquery popper.js tailwindcss stimulus local-time @fullhuman/postcss-purgecss"
 
   run 'rm app/javascript/packs/application.js'
 
